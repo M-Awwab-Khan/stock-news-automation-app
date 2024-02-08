@@ -1,4 +1,5 @@
 import requests
+import datetime as dt
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 ALPHAVANTAGE_API_KEY = 'GGBOXIZNYRXWEMKP'
@@ -13,7 +14,14 @@ params = {
 response = requests.get(ALPHAVANTAGE_END_POINT, params=params)
 response.raise_for_status()
 
-print(response.json())
+today = dt.datetime.now()
+yesterday = today - dt.timedelta(days=1)
+db_yesterday = today - dt.timedelta(days=2)
+yesterday_str = yesterday.strftime("%Y-%m-%d")
+db_yesterday_str = db_yesterday.strftime("%Y-%m-%d")
+data = response.json()
+yesterday_close = float(data["Time Series (Daily)"][yesterday_str]["4. close"])
+db_yesterday_close = float(data["Time Series (Daily)"][db_yesterday_str]["4. close"])
 
 
 ## STEP 1: Use https://www.alphavantage.co
