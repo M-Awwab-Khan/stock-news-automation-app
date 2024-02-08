@@ -1,5 +1,13 @@
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
+ALPHAVANTAGE_API_KEY = 'GGBOXIZNYRXWEMKP'
+ALPHAVANTAGE_END_POINT = 'https://www.alphavantage.co/query'
+
+params = {
+    'function': 'TIME_SERIES_DAILY',
+    'symbol': 'TSLA',
+    'apikey': 'GGBOXIZNYRXWEMKP'
+}
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
