@@ -32,22 +32,20 @@ db_yesterday_close = float(data["Time Series (Daily)"][db_yesterday_str]["4. clo
 
 perc_change = ((yesterday_close - db_yesterday_close) / db_yesterday_close) * 100
 if abs(perc_change) >= 5:
-    print('get news')
-else:
-    print('dont get news')
-
-## STEP 2: Use https://newsapi.org
-# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
-    
-news_params = {
+    news_params = {
     'q': COMPANY_NAME,
     'from': db_yesterday_str,
     'sortBy': 'publishedAt',
     'apiKey': NEWS_API_KEY
 }
-response = requests.get(NEWS_API_ENDPOINT, params=news_params)
-articles = response.json()['articles'][:3]
-print(articles)
+    response = requests.get(NEWS_API_ENDPOINT, params=news_params)
+    articles = response.json()['articles'][:3]
+    print(articles)
+
+## STEP 2: Use https://newsapi.org
+# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
+    
+
 
 ## STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number. 
