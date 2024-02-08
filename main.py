@@ -37,6 +37,15 @@ else:
 
 ## STEP 2: Use https://newsapi.org
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
+    
+news_params = {
+    'q': 'tesla',
+    'from': db_yesterday_str,
+    'sortBy': 'publishedAt',
+    'apiKey': NEWS_API_KEY
+}
+response = requests.get(NEWS_API_ENDPOINT, params=news_params)
+print(response.json())
 
 ## STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number. 
