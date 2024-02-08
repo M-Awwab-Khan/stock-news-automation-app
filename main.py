@@ -1,5 +1,7 @@
 import requests
 import datetime as dt
+import os
+from twilio.rest import Client
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
@@ -7,6 +9,10 @@ ALPHAVANTAGE_API_KEY = 'GGBOXIZNYRXWEMKP'
 ALPHAVANTAGE_END_POINT = 'https://www.alphavantage.co/query'
 NEWS_API_KEY = 'c892c61b7eff4d70b2335d9de845ec1d'
 NEWS_API_ENDPOINT = 'https://newsapi.org/v2/everything'
+FROM = 'whatsapp:+14155238886'
+TWILLO_ACCOUNT_SID = 'AC6225dcec0dc9d7ba1c300b82be9af3a2'
+TWILLO_AUTH_TOKEN = os.environ.get('TWILLO_AUTH_TOKEN')
+TO = 'whatsapp:+923422469246'
 
 alphavantage_params = {
     'function': 'TIME_SERIES_DAILY',
@@ -26,25 +32,36 @@ data = response.json()
 yesterday_close = float(data["Time Series (Daily)"][yesterday_str]["4. close"])
 db_yesterday_close = float(data["Time Series (Daily)"][db_yesterday_str]["4. close"])
 
-
-## STEP 1: Use https://www.alphavantage.co
-# When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
-
 perc_change = ((yesterday_close - db_yesterday_close) / db_yesterday_close) * 100
-if abs(perc_change) >= 5:
+if abs(perc_change) <= 2:
     news_params = {
     'q': COMPANY_NAME,
     'from': db_yesterday_str,
     'sortBy': 'publishedAt',
+    'language': 'en',
     'apiKey': NEWS_API_KEY
 }
     response = requests.get(NEWS_API_ENDPOINT, params=news_params)
     articles = response.json()['articles'][:3]
-    print(articles)
+    if perc_change > 0:
+        symbol = '🔺'
+    else:
+        symbol = '🔻'
+    msgs = []
+    for article in articles:
+        msg = f"""{STOCK}: {symbol}{round(perc_change, 1)}%
+Headline: {article['title']}. 
+Brief: {article['description']}."""
+        msgs.append(msg)
 
-## STEP 2: Use https://newsapi.org
-# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
-    
+    client = Client(TWILLO_ACCOUNT_SID, TWILLO_AUTH_TOKEN)
+    for msg in msgs:
+        message = client.messages.create(
+            from_=FROM,
+            body=msg,
+            to=TO
+        )
+        print(message.status)
 
 
 ## STEP 3: Use https://www.twilio.com
