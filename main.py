@@ -1,5 +1,6 @@
 import requests
 import datetime as dt
+
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 ALPHAVANTAGE_API_KEY = 'GGBOXIZNYRXWEMKP'
@@ -39,7 +40,7 @@ else:
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
     
 news_params = {
-    'q': 'tesla',
+    'q': COMPANY_NAME,
     'from': db_yesterday_str,
     'sortBy': 'publishedAt',
     'apiKey': NEWS_API_KEY
