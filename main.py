@@ -1,3 +1,4 @@
+import requests
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 ALPHAVANTAGE_API_KEY = 'GGBOXIZNYRXWEMKP'
@@ -8,6 +9,12 @@ params = {
     'symbol': 'TSLA',
     'apikey': 'GGBOXIZNYRXWEMKP'
 }
+
+response = requests.get(ALPHAVANTAGE_END_POINT, params=params)
+response.raise_for_status()
+
+print(response.json())
+
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
